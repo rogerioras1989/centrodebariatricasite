@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: centrodebariatrica-frontend
+    repo: https://github.com/rogerioras1989/centrodebariatricasite-frontend.git 
+    buildCommand: npm install
+    startCommand: npm start   
+    env: static
+    branch: master  
+
+  - type: web
+    name: centrodebariatrica-backend
+    repo: https://github.com/rogerioras1989/centrodebariatricasite.git  
+    buildCommand: npm install
+    startCommand: node index.js  
+    env: node
+    branch: master
