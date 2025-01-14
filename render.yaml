@@ -2,7 +2,7 @@ services:
   - type: web
     name: centrodebariatrica-frontend
     repo: https://github.com/rogerioras1989/centrodebariatricasite-frontend.git 
-    buildCommand: npm install --prefix frontend  
+    buildCommand: npm install && npm run build  
     startCommand: npm start --prefix frontend  
     env: static
     branch: master  
@@ -10,7 +10,7 @@ services:
   - type: web
     name: centrodebariatrica-backend
     repo: https://github.com/rogerioras1989/centrodebariatricasite.git  
-    buildCommand: npm install --prefix backend 
+    buildCommand: npm start
     startCommand: node backend/index.js  
     env: node
     branch: master
