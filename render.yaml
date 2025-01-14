@@ -2,15 +2,18 @@ services:
   - type: web
     name: centrodebariatrica-frontend
     repo: https://github.com/rogerioras1989/centrodebariatricasite-frontend.git 
-    buildCommand: npm install && npm run build  
-    startCommand: npm start --prefix frontend  
-    env: static
-    branch: master  
+    buildCommand: npm install && npm run build  # Construir o frontend
+    staticPublishPath: build                   # Diretório para publicar arquivos estáticos
+    env: static                                # Ambiente estático
+    branch: master
 
   - type: web
     name: centrodebariatrica-backend
-    repo: https://github.com/rogerioras1989/centrodebariatricasite.git  
-    buildCommand: npm start
-    startCommand: node backend/index.js  
-    env: node
+    repo: https://github.com/rogerioras1989/centrodebariaticasite.git  
+    buildCommand: npm install                  # Instalar dependências do backend
+    startCommand: npm start                    # Usar o comando start do package.json
+    env: node                                  # Ambiente Node.js
     branch: master
+    envVars:                                   # Configurar variáveis de ambiente
+      - key: MONGO_URI
+        sync: false                            # Valor configurado no painel do Render
