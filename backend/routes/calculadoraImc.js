@@ -1,22 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const ImcData = require('../models/ImcData');
-
-// Rota para cálculo do IMC e salvamento no MongoDB
 app.post('/api/calculadora-imc', async (req, res) => {
     const { nome, telefone, email, peso, altura, comorbidades } = req.body;
 
-    // Log dos dados recebidos no terminal
     console.log('Dados recebidos no backend:', req.body);
 
-    // Verificar se todos os campos obrigatórios foram preenchidos
     if (!nome || !telefone || !email || !peso || !altura) {
-        return res.status(400).json({ mensagem: 'Por favor, preencha todos os campos obrigatórios.' });
+        return res.status(400).json({ mensagem: 'Todos os campos obrigatórios devem ser preenchidos.' });
     }
 
-    // Cálculo do IMC
     const imc = (peso / Math.pow(altura, 2)).toFixed(2);
-    
+
     let mensagem = '';
     if (imc < 18.5) {
         mensagem = 'Seu IMC indica que você está abaixo do peso. Procure um nutricionista para melhorar sua saúde.';
@@ -34,9 +26,7 @@ app.post('/api/calculadora-imc', async (req, res) => {
         mensagem = 'Não foi possível determinar sua condição com base nos dados fornecidos. Por favor, consulte um profissional de saúde.';
     }
 
-    // Salvar os dados no MongoDB
     try {
-        // Log dos dados antes de salvar
         console.log('Dados para salvar no MongoDB:');
         console.log('Conexão com MongoDB:', mongoose.connection.readyState);
         console.log('Dados recebidos para salvar:', {
@@ -62,27 +52,20 @@ app.post('/api/calculadora-imc', async (req, res) => {
         await novoRegistro.save();
         console.log('Dados salvos no MongoDB:', novoRegistro);
 
-        res.status(200).json({ mensagem: 'Dados salvos com sucesso!' });
+        const mensagemPaciente = `Olá ${nome}, ${mensagem} Agende sua consulta pelo link: [LINK_AQUI]`;
+        enviarWhatsApp(telefone, mensagemPaciente);
+
+        const mensagemClinica = `Novo paciente capturado: Nome: ${nome}, Telefone: ${telefone}, E-mail: ${email}, IMC: ${imc}, Comorbidades: ${comorbidades?.join(', ') || 'Nenhuma'}`;
+        enviarWhatsApp('NUMERO_DA_CLINICA', mensagemClinica);
+
+        res.json({
+            imc,
+            mensagem,
+            comorbidadesSelecionadas: comorbidades || [],
+            observacao: 'Obs.: Os critérios seguem diretrizes médicas reconhecidas, como SBCBM e NIH, considerando IMC, comorbidades e avaliação global.',
+        });
     } catch (err) {
         console.error('Erro ao salvar no MongoDB:', err);
         res.status(500).json({ mensagem: 'Erro ao salvar os dados no banco de dados.' });
     }
-
-    // Mensagem para o paciente
-    const mensagemPaciente = `Olá ${nome}, ${mensagem} Agende sua consulta pelo link: [LINK_AQUI]`;
-    enviarWhatsApp(telefone, mensagemPaciente);
-
-    // Mensagem para a clínica
-    const mensagemClinica = `Novo paciente capturado: Nome: ${nome}, Telefone: ${telefone}, E-mail: ${email}, IMC: ${imc}, Comorbidades: ${comorbidades?.join(', ') || 'Nenhuma'}`;
-    enviarWhatsApp('NUMERO_DA_CLINICA', mensagemClinica);
-
-    // Responder ao cliente com o resultado
-    res.json({
-        imc,
-        mensagem,
-        comorbidadesSelecionadas: comorbidades || [],
-        observacao: 'Obs.: Os critérios seguem diretrizes médicas reconhecidas, como SBCBM e NIH, considerando IMC, comorbidades e avaliação global.',
-        }
 });
-
-module.exports = router;
