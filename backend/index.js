@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 require('dotenv').config(); // Carrega as variáveis do arquivo .env
 const cors = require('cors'); // Importa o middleware CORS
 const ImcData = require('./ImcData');
+const HipovitaminoseData = require('./HipovitaminoseData');
 
 // Inicializa o aplicativo
 const app = express();
@@ -28,17 +29,12 @@ function enviarWhatsApp(telefone, mensagem) {
     console.log(`Mensagem: ${mensagem}`);
 }
 
-// Rota inicial para testar o servidor
-app.get('/', (req, res) => {
-  res.send('Servidor rodando para o Centro de Bariátrica');
-});
-
 // Rota para cálculo do IMC e salvamento no MongoDB
 app.post('/api/calculadora-imc', async (req, res) => {
     const { nome, telefone, email, peso, altura, comorbidades } = req.body;
 
     // Log dos dados recebidos no terminal
-    console.log('Dados recebidos:', { nome, telefone, email, peso, altura, comorbidades });
+    console.log('Dados recebidos no backend:', req.body);
 
     // Verificar se todos os campos obrigatórios foram preenchidos
     if (!nome || !telefone || !email || !peso || !altura) {
@@ -47,8 +43,7 @@ app.post('/api/calculadora-imc', async (req, res) => {
 
     // Cálculo do IMC
     const imc = (peso / Math.pow(altura, 2)).toFixed(2);
-
-    // Mensagem personalizada com base no IMC e comorbidades
+    
     let mensagem = '';
     if (imc < 18.5) {
         mensagem = 'Seu IMC indica que você está abaixo do peso. Procure um nutricionista para melhorar sua saúde.';
@@ -68,6 +63,19 @@ app.post('/api/calculadora-imc', async (req, res) => {
 
     // Salvar os dados no MongoDB
     try {
+        // Log dos dados antes de salvar
+        console.log('Dados para salvar no MongoDB:');
+        console.log('Conexão com MongoDB:', mongoose.connection.readyState);
+        console.log('Dados recebidos para salvar:', {
+            nome,
+            telefone,
+            email,
+            peso,
+            altura,
+            comorbidades,
+            imc,
+        });
+
         const novoRegistro = new ImcData({
             nome,
             telefone,
@@ -76,32 +84,38 @@ app.post('/api/calculadora-imc', async (req, res) => {
             altura,
             comorbidades,
             imc,
-            mensagem
         });
 
         await novoRegistro.save();
         console.log('Dados salvos no MongoDB:', novoRegistro);
 
-        // Mensagem para o paciente
-        const mensagemPaciente = `Olá ${nome}, ${mensagem} Agende sua consulta pelo link: [LINK_AQUI]`;
-        enviarWhatsApp(telefone, mensagemPaciente);
-    
-        // Mensagem para a clínica
-        const mensagemClinica = `Novo paciente capturado: Nome: ${nome}, Telefone: ${telefone}, E-mail: ${email}, IMC: ${imc}, Comorbidades: ${comorbidades?.join(', ') || 'Nenhuma'}`;
-        enviarWhatsApp('NUMERO_DA_CLINICA', mensagemClinica);
-
-        // Responder ao cliente com o resultado
-        res.json({
-            imc,
-            mensagem,
-            comorbidadesSelecionadas: comorbidades || [],
-            observacao: 'Obs.: Os critérios seguem diretrizes médicas reconhecidas, como SBCBM e NIH, considerando IMC, comorbidades e avaliação global.',
-        });
+        res.status(200).json({ mensagem: 'Dados salvos com sucesso!' });
     } catch (err) {
         console.error('Erro ao salvar no MongoDB:', err);
         res.status(500).json({ mensagem: 'Erro ao salvar os dados no banco de dados.' });
     }
 });
+
+    // Mensagem para o paciente
+    const mensagemPaciente = `Olá ${nome}, ${mensagem} Agende sua consulta pelo link: [LINK_AQUI]`;
+    enviarWhatsApp(telefone, mensagemPaciente);
+
+    // Mensagem para a clínica
+    const mensagemClinica = `Novo paciente capturado: Nome: ${nome}, Telefone: ${telefone}, E-mail: ${email}, IMC: ${imc}, Comorbidades: ${comorbidades?.join(', ') || 'Nenhuma'}`;
+    enviarWhatsApp('NUMERO_DA_CLINICA', mensagemClinica);
+
+    // Responder ao cliente com o resultado
+    res.json({
+        imc,
+        mensagem,
+        comorbidadesSelecionadas: comorbidades || [],
+        observacao: 'Obs.: Os critérios seguem diretrizes médicas reconhecidas, como SBCBM e NIH, considerando IMC, comorbidades e avaliação global.',
+    });
+} catch (err) {
+    console.error('Erro ao salvar no MongoDB:', err);
+    res.status(500).json({ mensagem: 'Erro ao salvar os dados no banco de dados.' });
+}
+
 
 // Rota para o Questionário de Hipovitaminose
 app.post('/api/questionario-hipovitaminose', async (req, res) => {
