@@ -7,7 +7,7 @@ const ImcData = require('./ImcData');
 
 // Inicializa o aplicativo
 const app = express();
-const PORT = process.env.PORT || 3000;;
+const PORT = process.env.PORT || 3001;;
 
 // Conexão com o MongoDB Atlas
 mongoose
