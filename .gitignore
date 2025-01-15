@@ -1,1 +1,1 @@
-# Ignorar variáveis de ambiente.env# Ignorar dependências instaladas pelo Node.jsnode_modules/# Ignorar logsnpm-debug.log
+# Ignorar variáveis de ambiente.env# Ignorar dependências instaladas pelo Node.jsnode_modules/# Ignorar logsnpm-debug.log# Ignorar a pasta do frontendfrontend/
