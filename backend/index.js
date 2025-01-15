@@ -6,7 +6,7 @@ const cors = require('cors');
 
 // Importa as rotas separadas
 const calculadoraImcRoutes = require('./routes/calculadoraImc');
-const questionarioHipovitaminoseRoutes = require('./routes/questionariohipovitaminose');
+const questionarioHipovitaminoseRoutes = require('./routes/questionarioHipovitaminose');
 
 
 // Inicializa o aplicativo
@@ -30,8 +30,8 @@ app.get('/', (req, res) => {
 });
 
 // Usa as rotas importadas
-app.use('/api/calculadora-imc', calculadoraImcRoutes);
-app.use('/api/questionario-hipovitaminose', questionarioHipovitaminoseRoutes);
+app.use('/api/calculadora-Imc', calculadoraImcRoutes);
+app.use('/api/questionario-Hipovitaminose', questionarioHipovitaminoseRoutes);
 
 // Inicializa o servidor
 app.listen(PORT, () => {
