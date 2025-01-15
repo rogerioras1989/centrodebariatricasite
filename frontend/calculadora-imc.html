@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de IMC e Comorbidades</title>
+</head>
+<body>
+  <h1>Calculadora de IMC e Comorbidades</h1>
+  <form id="form-imc">
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" name="peso" required>
+    <br><br>
+    <div>
+      <label for="altura">Altura (m):</label>
+      <input type="number" id="altura" name="altura" step="0.01" placeholder="Ex.: 1.70" required>
+      <small style="color: red;">* Utilize ponto como separador. (Ex.: 1.70)</small>
+    </div>
+    <br><br>
+
+    <p>Você possui alguma destas condições?</p>
+    <label><input type="checkbox" name="comorbidades" value="Diabetes Mellitus tipo 2"> Diabetes Mellitus tipo 2</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Hipertensão Arterial Sistêmica"> Hipertensão Arterial Sistêmica</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Apneia Obstrutiva do Sono"> Apneia Obstrutiva do Sono</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Dislipidemia"> Dislipidemia (colesterol ou triglicérides elevados)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Esteatose Hepática"> Esteatose Hepática (fígado gorduroso)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Osteoartrite"> Osteoartrite (degeneração articular)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Doença do Refluxo Gastroesofágico"> Doença do Refluxo Gastroesofágico (DRGE)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Infertilidade relacionada à obesidade"> Infertilidade relacionada à obesidade</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Cardiopatia relacionada à obesidade"> Cardiopatia relacionada à obesidade</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Síndrome dos Ovários Policísticos"> Síndrome dos Ovários Policísticos (SOP)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Asma relacionada à obesidade"> Asma relacionada à obesidade</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Depressão relacionada ao peso"> Depressão relacionada ao peso</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Hérnia de Disco Lombar"> Hérnia de Disco Lombar</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Doença Renal Crônica"> Doença Renal Crônica</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Insuficiência Venosa Crônica"> Insuficiência Venosa Crônica</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Gota"> Gota</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Hipertensão Intracraniana Idiopática"> Hipertensão Intracraniana Idiopática (Pseudotumor Cerebri)</label><br>
+    <label><input type="checkbox" name="comorbidades" value="Doenças ortopédicas graves"> Doenças ortopédicas graves limitantes relacionadas ao peso</label><br>
+    <br><br>
+    <button type="submit">Calcular</button>
+  </form>
+
+  <!-- Campos adicionais escondidos inicialmente -->
+  <div id="dados-adicionais" style="display: none;">
+    <p>Enquanto calculamos, precisamos de mais alguns dados:</p>
+    
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required>
+    <br><br>
+
+    <label for="telefone">Telefone:</label>
+    <input type="tel" id="telefone" name="telefone" placeholder="(99) 99999-9999" required>
+    <br><br>
+
+    <label for="email">E-mail:</label>
+    <input type="email" id="email" name="email" required>
+    <br><br>
+  </div>
+
+  <!-- Exibição do resultado -->
+  <div id="resultado"></div>
+
+  <!-- JavaScript -->
+  <script>
+    document.getElementById('form-imc').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Evita o recarregamento da página
+
+      // Captura os dados do formulário
+      const peso = parseFloat(document.getElementById('peso').value);
+      const altura = parseFloat(document.getElementById('altura').value);
+      const comorbidades = Array.from(document.querySelectorAll('input[name="comorbidades"]:checked')).map(cb => cb.value);
+
+      // Mostrar campos adicionais
+      document.getElementById('dados-adicionais').style.display = 'block'; // Torna visível
+
+      // Mensagem indicando que os dados adicionais são necessários
+      document.getElementById('resultado').innerHTML = `
+        <p>Enquanto calculamos seu IMC, por favor, forneça os seguintes dados:</p>
+      `;
+
+      // Aguarda preenchimento dos campos adicionais
+      const buttonSubmit = document.createElement('button');
+      buttonSubmit.textContent = 'Enviar Dados';
+      buttonSubmit.type = 'button'; // Evitar envio automático
+      buttonSubmit.style.marginTop = '10px';
+      document.getElementById('dados-adicionais').appendChild(buttonSubmit);
+
+      buttonSubmit.addEventListener('click', async () => {
+        const nome = document.getElementById('nome').value;
+        const telefone = document.getElementById('telefone').value;
+        const email = document.getElementById('email').value;
+
+        if (!nome || !telefone || !email) {
+          document.getElementById('resultado').innerHTML = `
+            <p style="color: red;">Por favor, preencha todos os campos adicionais antes de prosseguir.</p>
+          `;
+          return;
+        }
+
+        // Envia os dados para o backend
+const response = await fetch('https://centrodebariatrica-backend.onrender.com/api/calculadora-imc', { 
+    method: 'POST',
+    headers: { 
+        'Content-Type': 'application/json' 
+    },
+    body: JSON.stringify({ nome, telefone, email, peso, altura, comorbidades }),
+});
+
+
+        const data = await response.json();
+
+        // Exibe o resultado no frontend
+        document.getElementById('resultado').innerHTML = `
+          <p>Seu IMC é: ${data.imc}</p>
+          <p>${data.mensagem}</p>
+        `;
+      });
+    });
+  </script>
+</body>
+</html>

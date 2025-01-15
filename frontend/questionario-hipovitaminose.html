@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionário de Hipovitaminose</title>
+</head>
+<body>
+    <h1>Questionário de Hipovitaminose</h1>
+    <form id="form-hipovitaminose">
+        <p>1. Você realizou a cirurgia bariátrica?</p>
+        <label><input type="radio" name="cirurgia" value="sim" required> Sim</label><br>
+        <label><input type="radio" name="cirurgia" value="nao" required> Não</label><br>
+
+        <div id="fluxo-sim" style="display: none;">
+            <p>2. Qual foi o tipo de cirurgia realizada?</p>
+            <label><input type="radio" name="tipo-cirurgia" value="bypass"> Bypass gástrico</label><br>
+            <label><input type="radio" name="tipo-cirurgia" value="sleeve"> Gastrectomia vertical (Sleeve)</label><br>
+            <label><input type="radio" name="tipo-cirurgia" value="outros"> Outros</label><br>
+
+            <p>3. Em qual ano foi realizada a cirurgia?</p>
+            <input type="number" name="ano-cirurgia" min="1900" max="2025"><br>
+
+            <p>4. Você está apresentando algum dos sintomas abaixo? (Selecione todos os que se aplicam)</p>
+<label><input type="checkbox" name="sintomas" value="queda-cabelo"> Queda de cabelo</label><br>
+<label><input type="checkbox" name="sintomas" value="caibras"> Cãibras ou dores musculares</label><br>
+<label><input type="checkbox" name="sintomas" value="fadiga"> Fadiga, cansaço extremo</label><br>
+<label><input type="checkbox" name="sintomas" value="dificuldades-memoria"> Dificuldades de memória ou esquecimento frequente</label><br>
+<label><input type="checkbox" name="sintomas" value="infeccoes-frequentes"> Infecções ou resfriados com mais frequência</label><br>
+<label><input type="checkbox" name="sintomas" value="reducao-libido"> Redução da libido</label><br>
+<label><input type="checkbox" name="sintomas" value="fragilidade-unhas"> Fragilidade ou quebra de unhas</label><br>
+<label><input type="checkbox" name="sintomas" value="formigamento"> Sensação de formigamento ou dormência nas extremidades</label><br>
+<label><input type="checkbox" name="sintomas" value="alteracoes-humor"> Alterações de humor (irritabilidade, ansiedade ou depressão)</label><br>
+<label><input type="checkbox" name="sintomas" value="desgaste-dentes"> Desgaste ou enfraquecimento dos dentes</label><br>
+
+            <p>5. Está utilizando suplementos vitamínicos regularmente?</p>
+            <label><input type="radio" name="suplementos" value="sim"> Sim</label><br>
+            <label><input type="radio" name="suplementos" value="nao"> Não</label><br>
+
+            <p>6. Qual é a forma mais comum que você utiliza para repor vitaminas e/ou minerais?</p>
+            <label><input type="radio" name="reposicao" value="oral"> Oral</label><br>
+            <label><input type="radio" name="reposicao" value="injetavel"> Injetável</label><br>
+            <label><input type="radio" name="reposicao" value="ambos"> Ambos</label><br>
+        </div>
+
+        <div id="fluxo-nao" style="display: none;">
+    <p>2. Se você não realizou a cirurgia bariátrica, qual é o motivo principal que o trouxe aqui hoje?</p>
+    <label><input type="radio" name="motivo" value="considerando"> Estou considerando realizar a cirurgia.</label><br>
+    <label><input type="radio" name="motivo" value="entender-cuidados"> Quero entender mais sobre os cuidados pós-cirúrgicos.</label><br>
+    <label><input type="radio" name="motivo" value="sintomas"> Estou buscando soluções para os sintomas que estou sentindo.</label><br>
+    <label><input type="radio" name="motivo" value="outro"> Outro:</label>
+    <textarea name="motivo-outro" placeholder="Descreva aqui (opcional)"></textarea><br>
+
+    <p>3. Você está apresentando algum dos sintomas abaixo? (Selecione todos que se aplicam)</p>
+<label><input type="checkbox" name="sintomas" value="queda-cabelo"> Queda de cabelo</label><br>
+<label><input type="checkbox" name="sintomas" value="caibras"> Cãibras ou dores musculares</label><br>
+<label><input type="checkbox" name="sintomas" value="fadiga"> Fadiga, cansaço extremo</label><br>
+<label><input type="checkbox" name="sintomas" value="dificuldades-memoria"> Dificuldades de memória ou esquecimento frequente</label><br>
+<label><input type="checkbox" name="sintomas" value="infeccoes-frequentes"> Infecções ou resfriados com mais frequência</label><br>
+<label><input type="checkbox" name="sintomas" value="reducao-libido"> Redução da libido</label><br>
+<label><input type="checkbox" name="sintomas" value="fragilidade-unhas"> Fragilidade ou quebra de unhas</label><br>
+<label><input type="checkbox" name="sintomas" value="formigamento"> Sensação de formigamento ou dormência nas extremidades</label><br>
+<label><input type="checkbox" name="sintomas" value="alteracoes-humor"> Alterações de humor (irritabilidade, ansiedade ou depressão)</label><br>
+<label><input type="checkbox" name="sintomas" value="desgaste-dentes"> Desgaste ou enfraquecimento dos dentes</label><br>
+
+    <p>4. Há quanto tempo você está apresentando esses sintomas?</p>
+    <label><input type="radio" name="tempo-sintomas" value="menos-6-meses"> Menos de 6 meses</label><br>
+    <label><input type="radio" name="tempo-sintomas" value="6-meses-1-ano"> Entre 6 meses e 1 ano</label><br>
+    <label><input type="radio" name="tempo-sintomas" value="mais-1-ano"> Mais de 1 ano</label><br>
+
+    <p>5. Qual o seu peso e altura?</p>
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" name="peso" step="0.1"><br>
+    <label for="altura">Altura (m):</label>
+    <input type="number" id="altura" name="altura" step="0.01"><br>
+	</div>
+
+
+        <p>Antes de visualizar o resultado, insira seus dados:</p>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required><br>
+        <label for="telefone">WhatsApp:</label>
+        <input type="tel" id="telefone" name="telefone" required><br>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+  <div id="resultado"></div>
+
+<script>
+    // Configura os eventos para mostrar os fluxos de "SIM" e "NÃO"
+    document.querySelectorAll('input[name="cirurgia"]').forEach(input => {
+        input.addEventListener('change', () => {
+            document.getElementById('fluxo-sim').style.display = input.value === 'sim' ? 'block' : 'none';
+            document.getElementById('fluxo-nao').style.display = input.value === 'nao' ? 'block' : 'none';
+        });
+    });
+
+    // Envia os dados do formulário ao backend
+    document.getElementById('form-hipovitaminose').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+        const data = Object.fromEntries(formData);
+
+        try {
+            const response = await fetch('https://centrodebariatrica-backend.onrender.com/api/questionario-hipovitaminose', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+});
+
+            const result = await response.json();
+
+            // Atualiza o conteúdo do "resultado" com a mensagem e o DISCLAIMER
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML = `
+                <h2>Resultado do Questionário</h2>
+                <p>${result.mensagem}</p>
+
+                <!-- DISCLAIMER -->
+                <h3>DISCLAIMER</h3>
+                <ul>
+                    <li>Este questionário tem como objetivo auxiliar no monitoramento de possíveis deficiências nutricionais. As informações fornecidas são para fins educativos e não devem ser utilizadas como diagnóstico ou tratamento. Para uma avaliação completa, consulte um especialista.</li>
+                    <li>Este indicador é uma ferramenta educativa e não substitui uma consulta médica. Procure um profissional de saúde para uma avaliação detalhada. Nenhuma decisão sobre sua saúde deve ser tomada exclusivamente com base neste questionário.</li>
+                    <li>Todas as informações coletadas neste questionário serão tratadas de forma confidencial e utilizadas apenas para fins educativos, orientação e agendamento de consultas, quando necessário. Seus dados pessoais não serão compartilhados com terceiros fora do ambiente da clínica ou equipe responsável, sem sua permissão.</li>
+                    <li>Os resultados deste questionário são meramente indicativos e sugerem a necessidade de avaliação médica caso sintomas ou deficiências sejam identificados. A interpretação dos resultados deve ser realizada com o suporte de um profissional de saúde.</li>
+                    <li>Obrigado por responder ao questionário! Lembre-se de que a manutenção da saúde pós-cirurgia bariátrica exige acompanhamento contínuo. Estamos à disposição para ajudar você a alcançar o seu melhor bem-estar.</li>
+                </ul>
+            `;
+        } catch (error) {
+            console.error('Erro ao enviar o formulário:', error);
+            alert('Ocorreu um erro ao processar o questionário. Por favor, tente novamente mais tarde.');
+        }
+    });
+</script>
+</body>
+</html>
+
