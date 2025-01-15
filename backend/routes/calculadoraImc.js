@@ -1,4 +1,16 @@
-app.post('/api/calculadora-imc', async (req, res) => {
+const express = require('express');
+const mongoose = require('mongoose'); // Importação necessária
+const ImcData = require('../models/ImcData'); // Certifique-se de que o modelo está correto
+const router = express.Router();
+
+// Função para simular envio de WhatsApp
+function enviarWhatsApp(telefone, mensagem) {
+    console.log(`Simulação de envio de WhatsApp para ${telefone}:`);
+    console.log(mensagem);
+}
+
+// Define a rota POST para calcular o IMC
+router.post('/', async (req, res) => {
     const { nome, telefone, email, peso, altura, comorbidades } = req.body;
 
     console.log('Dados recebidos no backend:', req.body);
@@ -40,14 +52,16 @@ app.post('/api/calculadora-imc', async (req, res) => {
         });
 
         const novoRegistro = new ImcData({
-            nome,
-            telefone,
-            email,
-            peso,
-            altura,
-            comorbidades,
-            imc,
-        });
+        nome,
+        telefone,
+        email,
+        peso,
+        altura,
+        imc,
+        comorbidades,
+        mensagem, // Inclua a mensagem gerada
+	});
+
 
         await novoRegistro.save();
         console.log('Dados salvos no MongoDB:', novoRegistro);
@@ -69,3 +83,5 @@ app.post('/api/calculadora-imc', async (req, res) => {
         res.status(500).json({ mensagem: 'Erro ao salvar os dados no banco de dados.' });
     }
 });
+
+module.exports = router;

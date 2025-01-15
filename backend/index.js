@@ -6,7 +6,8 @@ const cors = require('cors');
 
 // Importa as rotas separadas
 const calculadoraImcRoutes = require('./routes/calculadoraImc');
-const questionarioHipovitaminoseRoutes = require('./routes/questionarioHipovitaminose');
+const questionarioHipovitaminoseRoutes = require('./routes/questionariohipovitaminose');
+
 
 // Inicializa o aplicativo
 const app = express();
@@ -21,6 +22,7 @@ mongoose
 // Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Rota inicial para teste do servidor
 app.get('/', (req, res) => {

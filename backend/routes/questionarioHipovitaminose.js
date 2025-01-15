@@ -1,12 +1,18 @@
 const express = require('express');
+const mongoose = require('mongoose'); // Importação necessária
 const router = express.Router();
-const HipovitaminoseData = require('../models/HipovitaminoseData');
+const HipovitaminoseData = require('../models/HipovitaminoseData'); // Certifique-se de que o modelo existe
+
+// Função para simular envio de WhatsApp
+function enviarWhatsApp(telefone, mensagem) {
+    console.log(`Simulação de envio de WhatsApp para ${telefone}:`);
+    console.log(mensagem);
+}
 
 // Rota para o Questionário de Hipovitaminose
-app.post('/api/questionario-hipovitaminose', async (req, res) => {
-    const data = req.body;  // Use data em vez de desestruturar
-    console.log('Dados recebidos:', data);
-    
+router.post('/', async (req, res) => {
+    const data = req.body;
+
     try {
         // Validação básica
         if (!data.cirurgia || !data.nome || !data.telefone) {
@@ -127,9 +133,10 @@ app.post('/api/questionario-hipovitaminose', async (req, res) => {
             }
             // Criação do registro no MongoDB
             try {
-                const novoRegistro = new ImcData({
-                    ...data, // Inclui os campos enviados no formulário
+               const novoRegistro = new HipovitaminoseData({
+                ...data, // Inclui os campos enviados no formulário
                     imc, // Inclui o cálculo do IMC
+		    pontuacao,
                     mensagem, // A mensagem gerada dinamicamente
                 });
                 await novoRegistro.save(); // Salva no MongoDB
